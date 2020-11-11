@@ -1,7 +1,9 @@
 package com.blz.addressbookcsv.json;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,11 +11,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -58,8 +62,14 @@ public class AddressBook {
 			addDataToFile(firstName, lastName, address, city, state, phoneNo, zip, email, addressBookName);
 			try {
 				addDataToCSVFile(addressBookName);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+			try {
+				addDataToJSONFile(addressBookName);
+
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -177,8 +187,8 @@ public class AddressBook {
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 		try {
@@ -188,8 +198,8 @@ public class AddressBook {
 					+ address + "\n4.City: " + city + "\n5.State: " + state + "\n6.Phone number: " + phoneNumber
 					+ "\n7.Zip: " + zip + "\n8.email: " + email + "\n");
 			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -199,8 +209,8 @@ public class AddressBook {
 		Path filePath = Paths.get("C:\\Users\\Siva Reddy\\eclipse-workspace\\AddressBookCSV_Json" + fileName + ".txt");
 		try {
 			Files.lines(filePath).map(line -> line.trim()).forEach(line -> System.out.println(line));
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -225,8 +235,8 @@ public class AddressBook {
 			}
 			writer.writeAll(data);
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -244,8 +254,39 @@ public class AddressBook {
 				}
 				System.out.print("\n");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void addDataToJSONFile(String addressBookName) throws IOException {
+		System.out.println("Enter name for json file : ");
+		String fileName = sc.nextLine();
+		Path filePath = Paths.get("C:\\Users\\siva Reddy\\eclipse-workspace\\AddressBookCSV_Json" + fileName + ".json");
+		Gson gson = new Gson();
+		String json = gson.toJson(person);
+		FileWriter writer = new FileWriter(String.valueOf(filePath));
+		writer.write(json);
+		writer.close();
+	}
+
+	public void readDataFromJSONFile() throws FileNotFoundException {
+		System.out.println("Enter address book Json filename : ");
+		String fileName = sc.nextLine();
+		Path filePath = Paths.get("C:\\Users\\Siva Reddy\\eclipse-workspace\\AddressBookCSV_Json" + fileName + ".json");
+		Gson gson = new Gson();
+		BufferedReader br = new BufferedReader(new FileReader(String.valueOf(filePath)));
+		PersonDetails[] data = gson.fromJson(br, PersonDetails[].class);
+		List<PersonDetails> list = Arrays.asList(data);
+		for (PersonDetails details : list) {
+			System.out.println("Firstname : " + details.firstName);
+			System.out.println("Lastname : " + details.lastName);
+			System.out.println("Address : " + details.address);
+			System.out.println("City : " + details.city);
+			System.out.println("State : " + details.state);
+			System.out.println("Zip : " + details.zip);
+			System.out.println("Phone no : " + details.phoneNo);
+			System.out.println("Email : " + details.email);
 		}
 	}
 
