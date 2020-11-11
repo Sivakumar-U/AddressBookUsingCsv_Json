@@ -61,9 +61,9 @@ public class AddressBookMain {
 		while (flag == 1) {
 			System.out.println("Welcome to address book program ");
 			System.out.println(
-					"Enter choice \n1. AddContact \n2.Edit \n3.Delete \n4. Search \n5.View person \n6.Count no.of peoples in same city"
-							+ " \n7.SortByName \n8.SortByCityName \n9.AddContactToFile \n10.ReadDataFromFile \n11.addContactsToCSVFile \n12.ReadDataFromCSVFile"
-							+ " \n13. Exit ");
+					"Enter choice \n1. Add Contact \n2. Edit Contact \n3. Delete Contact \n4. Search Contact \n5. View Contact \n6. Count no.of peoples in same city"
+							+ " \n7. Sort By Name \n8. Sort By CityName \n9. Add Contact To File \n10. Read Data From File \n11. add Contacts To CSV File \n12. Read Data From CSV File"
+							+ " \n13. add Contacts To JSON File \n14. Read Contacts From JSON File \n15. Exit ");
 			int choice = sc.nextInt();
 			switch (choice) {
 			case 1:
@@ -133,6 +133,13 @@ public class AddressBookMain {
 				addressBook.readDataFromCSVFile();
 				break;
 			case 13:
+				addressBook.addContact(addressBookName);
+				System.out.println("Successfully added to JSON file");
+				break;
+			case 14:
+				addressBook.readDataFromJSONFile();
+				break;
+			case 15:
 				mainObj.addAddressBook();
 				flag = 0;
 				break;
